@@ -1,0 +1,53 @@
+version: "2.6"
+
+services:
+
+  web:
+    build: "./php-mysql"
+    container_name: servidor-apache-php
+    restart: always
+
+    volumes:
+      - /home/kassio/Projetos-PHP/Projeto1.0:/var/www/html
+
+    ports:
+     - "4400:80"
+
+    networks:
+      - rede-projeto1.0
+
+  db:
+    image: mysql:8.0
+    container_name: bd-projeto-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: "projeto123"
+      MYSQL_DATABASE: "crud_clientes"
+    ports:
+      - "3305:3306"
+
+    volumes:
+      - /data/mysql-p:/var/lib/mysql
+    networks:
+      - rede-projeto1.0
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      MYSQL_ROOT_PASSWORD: "projeto123"
+    ports:
+      - "8080:80"
+    volumes:
+      - /data/php/admin/uploads.ini:/usr/local/etc/php/conf.d/php-phpmyadmin.ini
+
+    networks:
+      - rede-projeto1.0
+
+volumes:
+  data:
+    name: volume-projeto1.0
+
+networks:
+  rede-projeto1.0:
+    driver: bridge
+
+  
